@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import { env } from './config/env';
 import { logger } from './config/logger';
+import { AppError } from './lib/errors';
 
 const app = express();
 
@@ -51,6 +52,14 @@ app.use((_req: Request, res: Response): void => {
 // ─── Global error handler ────────────────────────────────────────────────────
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({
+      success: false,
+      error: { code: err.code, message: err.message },
+    });
+    return;
+  }
+
   logger.error('Unhandled error', { message: err.message, stack: err.stack });
   res.status(500).json({
     success: false,

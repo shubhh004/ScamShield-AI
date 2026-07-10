@@ -9,8 +9,10 @@ const envSchema = z.object({
     .default('http://localhost:5173')
     .transform((v) => v.split(',')),
   MONGODB_URI: z.string().optional(),
-  JWT_SECRET: z.string().optional(),
-  JWT_REFRESH_SECRET: z.string().optional(),
+  JWT_ACCESS_SECRET: z.string().default('dev-access-secret-change-in-production'),
+  JWT_REFRESH_SECRET: z.string().default('dev-refresh-secret-change-in-production'),
+  JWT_ACCESS_EXPIRES: z.string().default('15m'),
+  JWT_REFRESH_EXPIRES: z.string().default('7d'),
 });
 
 const parsed = envSchema.safeParse(process.env);
