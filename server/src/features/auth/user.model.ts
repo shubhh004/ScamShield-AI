@@ -12,6 +12,8 @@ export interface IUser {
   isDeleted: boolean;
   deletedAt: Date | null;
   refreshTokenHash: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type UserDocument = IUser & Document;

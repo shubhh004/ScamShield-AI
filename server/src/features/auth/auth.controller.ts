@@ -65,6 +65,23 @@ export async function refresh(req: Request, res: Response, next: NextFunction): 
   }
 }
 
+export async function me(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const user = req.user;
+    if (user === undefined) {
+      next(new UnauthorizedError());
+      return;
+    }
+    const profile = await authService.getMe(user.id);
+    res.status(200).json({
+      success: true,
+      data: { user: profile },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function logout(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const user = req.user;

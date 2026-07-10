@@ -10,6 +10,7 @@ import {
   ForbiddenError,
   InvalidCredentialsError,
   InvalidRefreshTokenError,
+  NotFoundError,
 } from '../../lib/errors';
 import type { RegisterInput, LoginInput } from './auth.schema';
 import type { UserRole } from './auth.constants';
@@ -33,6 +34,10 @@ interface RegisterResult extends AuthTokens {
 
 interface LoginResult extends AuthTokens {
   user: SafeUser;
+}
+
+interface UserProfile extends SafeUser {
+  createdAt: Date;
 }
 
 function toSafeUser(user: {
@@ -145,4 +150,19 @@ export async function refreshAccessToken(
 
 export async function logoutUser(userId: string): Promise<void> {
   await User.findByIdAndUpdate(userId, { refreshTokenHash: null });
+}
+
+export async function getMe(userId: string): Promise<UserProfile> {
+  const user = await User.findOne({ _id: userId, isDeleted: false, isActive: true });
+  if (user === null) {
+    throw new NotFoundError('User');
+  }
+  return {
+    id: String(user._id),
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    isEmailVerified: user.isEmailVerified,
+    createdAt: user.createdAt,
+  };
 }
