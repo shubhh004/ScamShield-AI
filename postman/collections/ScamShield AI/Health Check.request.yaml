@@ -1,0 +1,5 @@
+$kind: http-request
+name: Health Check
+url: http://localhost:5000/health
+method: GET
+order: 1783684907213

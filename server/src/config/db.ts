@@ -1,6 +1,18 @@
+import mongoose from 'mongoose';
+import { env } from './env';
 import { logger } from './logger';
 
-// Database connection is configured in Sprint 2 when models are implemented.
 export async function connectDatabase(): Promise<void> {
-  logger.info('Database connection pending — MongoDB URI not yet configured');
+  if (env.MONGODB_URI === undefined) {
+    logger.warn('MONGODB_URI not set — database features will be unavailable');
+    return;
+  }
+
+  try {
+    await mongoose.connect(env.MONGODB_URI);
+    logger.info('MongoDB connected');
+  } catch (err) {
+    logger.error('MongoDB connection failed', { error: String(err) });
+    process.exit(1);
+  }
 }

@@ -51,3 +51,9 @@ export class ValidationError extends AppError {
     super(400, 'VALIDATION_ERROR', message);
   }
 }
+
+export class InvalidRefreshTokenError extends AppError {
+  constructor() {
+    super(401, 'INVALID_REFRESH_TOKEN', 'Refresh token is missing, expired, or has already been used');
+  }
+}

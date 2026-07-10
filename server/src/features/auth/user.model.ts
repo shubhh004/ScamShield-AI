@@ -72,7 +72,7 @@ const userSchema = new Schema<UserDocument>(
   { timestamps: true },
 );
 
-userSchema.index({ email: 1 }, { unique: true });
+// email index is created by unique:true on the field; only declare the compound index here
 userSchema.index({ isDeleted: 1, createdAt: -1 });
 
 export const User: Model<UserDocument> = mongoose.model<UserDocument>('User', userSchema);

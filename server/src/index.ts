@@ -1,11 +1,13 @@
-import express, { type Request, type Response, type NextFunction } from 'express';
+import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import { env } from './config/env';
 import { logger } from './config/logger';
-import { AppError } from './lib/errors';
+import { connectDatabase } from './config/db';
+import { errorHandler } from './middleware/errorHandler';
+import authRoutes from './features/auth/auth.routes';
 
 const app = express();
 
@@ -40,6 +42,8 @@ function healthResponse(_req: Request, res: Response): void {
 app.get('/health', healthResponse);
 app.get('/api/v1/health', healthResponse);
 
+app.use('/api/v1/auth', authRoutes);
+
 // ─── 404 handler ─────────────────────────────────────────────────────────────
 
 app.use((_req: Request, res: Response): void => {
@@ -51,33 +55,28 @@ app.use((_req: Request, res: Response): void => {
 
 // ─── Global error handler ────────────────────────────────────────────────────
 
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
-  if (err instanceof AppError) {
-    res.status(err.statusCode).json({
-      success: false,
-      error: { code: err.code, message: err.message },
-    });
-    return;
-  }
-
-  logger.error('Unhandled error', { message: err.message, stack: err.stack });
-  res.status(500).json({
-    success: false,
-    error: { code: 'INTERNAL_ERROR', message: 'An unexpected error occurred' },
-  });
-});
+app.use(errorHandler);
 
 // ─── Start ───────────────────────────────────────────────────────────────────
 
-const server = app.listen(env.PORT, () => {
-  logger.info(`Server running`, { port: env.PORT, environment: env.NODE_ENV });
-});
+async function start(): Promise<void> {
+  await connectDatabase();
 
-process.on('SIGTERM', () => {
-  server.close(() => {
-    logger.info('Server closed gracefully');
-    process.exit(0);
+  const server = app.listen(env.PORT, () => {
+    logger.info('Server running', { port: env.PORT, environment: env.NODE_ENV });
   });
+
+  process.on('SIGTERM', () => {
+    server.close(() => {
+      logger.info('Server closed gracefully');
+      process.exit(0);
+    });
+  });
+}
+
+start().catch((err: unknown) => {
+  logger.error('Failed to start server', { error: String(err) });
+  process.exit(1);
 });
 
 export default app;
