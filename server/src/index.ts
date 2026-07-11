@@ -9,6 +9,7 @@ import { connectDatabase } from './config/db';
 import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './features/auth/auth.routes';
 import scanRoutes from './features/scan-url/url.routes';
+import emailRoutes from './features/scan-email/scan-email.routes';
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.get('/api/v1/health', healthResponse);
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/scan', scanRoutes);
+app.use('/api/v1/scan', emailRoutes);
 
 // ─── 404 handler ─────────────────────────────────────────────────────────────
 
