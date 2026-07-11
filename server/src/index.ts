@@ -10,6 +10,8 @@ import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './features/auth/auth.routes';
 import scanRoutes from './features/scan-url/url.routes';
 import emailRoutes from './features/scan-email/scan-email.routes';
+import fileRoutes from './features/scan-file/scan-file.routes';
+import smsRoutes from './features/scan-sms/sms.routes';
 
 const app = express();
 
@@ -47,6 +49,8 @@ app.get('/api/v1/health', healthResponse);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/scan', scanRoutes);
 app.use('/api/v1/scan', emailRoutes);
+app.use('/api/v1/scan', fileRoutes);
+app.use('/api/v1/scan', smsRoutes);
 
 // ─── 404 handler ─────────────────────────────────────────────────────────────
 
