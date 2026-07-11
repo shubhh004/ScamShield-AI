@@ -13,7 +13,7 @@ export async function initiateUrlScan(input: ScanUrlInput): Promise<ScanUrlResul
   const normalizedUrl = normalizeUrl(input.url);
   const scanId = randomUUID();
 
-  const { riskScore, riskLevel, reasons } = assessRisk(normalizedUrl);
+  const { riskScore, riskLevel, confidence, reasons } = assessRisk(normalizedUrl, input.url);
 
   logger.info('URL scan complete', { scanId, url: input.url, normalizedUrl, riskScore, riskLevel });
 
@@ -23,6 +23,7 @@ export async function initiateUrlScan(input: ScanUrlInput): Promise<ScanUrlResul
     normalizedUrl,
     riskScore,
     riskLevel,
+    confidence,
     reasons,
   };
 }

@@ -8,5 +8,6 @@ export interface ScanUrlResult {
   normalizedUrl: string;
   riskScore: number;
   riskLevel: RiskLevel;
+  confidence: number;
   reasons: string[];
 }
