@@ -12,6 +12,7 @@ import scanRoutes from './features/scan-url/url.routes';
 import emailRoutes from './features/scan-email/scan-email.routes';
 import fileRoutes from './features/scan-file/scan-file.routes';
 import smsRoutes from './features/scan-sms/sms.routes';
+import qrRoutes from './features/scan-qr/qr.routes';
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/api/v1/scan', scanRoutes);
 app.use('/api/v1/scan', emailRoutes);
 app.use('/api/v1/scan', fileRoutes);
 app.use('/api/v1/scan', smsRoutes);
+app.use('/api/v1/scan', qrRoutes);
 
 // ─── 404 handler ─────────────────────────────────────────────────────────────
 
