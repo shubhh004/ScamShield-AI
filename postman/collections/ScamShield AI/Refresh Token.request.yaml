@@ -1,4 +1,5 @@
 $kind: http-request
-url: ""
-method: GET
+name: Refresh Token
+url: http://localhost:5000/api/v1/auth/refresh
+method: POST
 order: 4174816355390112
