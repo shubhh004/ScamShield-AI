@@ -1,7 +1,5 @@
 import { Bell, LogOut, User } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { ROUTES } from '@/constants/routes';
 import Button from './Button';
 
 interface TopbarProps {
@@ -10,11 +8,9 @@ interface TopbarProps {
 
 export default function Topbar({ title }: TopbarProps): JSX.Element {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   function handleLogout(): void {
-    logout();
-    void navigate(ROUTES.LOGIN);
+    void logout();
   }
 
   return (

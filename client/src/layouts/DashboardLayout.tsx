@@ -1,16 +1,24 @@
-import { Outlet, useMatches } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import Sidebar from '@/components/ui/Sidebar';
 import Topbar from '@/components/ui/Topbar';
+import { ROUTES } from '@/constants/routes';
 
-type RouteHandle = { title?: string };
+const ROUTE_TITLES: Record<string, string> = {
+  [ROUTES.DASHBOARD]: 'Dashboard',
+  [ROUTES.SCAN_URL]: 'URL Scanner',
+  [ROUTES.SCAN_EMAIL]: 'Email Scanner',
+  [ROUTES.SCAN_SMS]: 'SMS Scanner',
+  [ROUTES.SCAN_QR]: 'QR Scanner',
+  [ROUTES.SCAN_IMAGE]: 'Image OCR',
+  [ROUTES.HISTORY]: 'History',
+  [ROUTES.ANALYTICS]: 'Analytics',
+  [ROUTES.SETTINGS]: 'Settings',
+};
 
 export default function DashboardLayout(): JSX.Element {
-  const matches = useMatches();
-  const titles = matches
-    .filter((m) => (m.handle as RouteHandle | undefined)?.title !== undefined)
-    .map((m) => (m.handle as RouteHandle).title);
-  const title = titles[titles.length - 1];
+  const { pathname } = useLocation();
+  const title = ROUTE_TITLES[pathname];
 
   return (
     <div className="flex h-screen overflow-hidden bg-bg">

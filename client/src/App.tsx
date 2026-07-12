@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { PageLoader } from '@/components/ui/Loading';
 import ProtectedRoute from '@/components/ui/ProtectedRoute';
+import PublicRoute from '@/components/ui/PublicRoute';
 import LandingLayout from '@/layouts/LandingLayout';
 import AuthLayout from '@/layouts/AuthLayout';
 import DashboardLayout from '@/layouts/DashboardLayout';
@@ -33,10 +34,12 @@ export default function App(): JSX.Element {
               <Route path={ROUTES.HOME} element={<LandingPage />} />
             </Route>
 
-            {/* Auth */}
-            <Route element={<AuthLayout />}>
-              <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-              <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+            {/* Auth — redirect authenticated users to dashboard */}
+            <Route element={<PublicRoute />}>
+              <Route element={<AuthLayout />}>
+                <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+                <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+              </Route>
             </Route>
 
             {/* Protected dashboard */}

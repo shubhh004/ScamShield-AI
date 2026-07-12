@@ -1,14 +1,19 @@
+export type UserRole = 'user' | 'admin';
+
 export interface User {
   id: string;
-  email: string;
   name: string;
-  createdAt: string;
+  email: string;
+  role: UserRole;
+  isEmailVerified: boolean;
+  createdAt?: string;
 }
 
 export interface AuthState {
   user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
 export interface LoginCredentials {

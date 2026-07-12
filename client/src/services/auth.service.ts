@@ -1,5 +1,5 @@
 import apiClient from '@/lib/api/apiClient';
-import type { AuthResponse, LoginCredentials, RegisterCredentials } from '@/types/auth';
+import type { AuthResponse, LoginCredentials, RegisterCredentials, User } from '@/types/auth';
 
 export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
   const res = await apiClient.post<{ success: true; data: AuthResponse }>('/auth/login', credentials);
@@ -18,4 +18,9 @@ export async function logout(): Promise<void> {
 export async function refreshToken(): Promise<string> {
   const res = await apiClient.post<{ success: true; data: { accessToken: string } }>('/auth/refresh');
   return res.data.data.accessToken;
+}
+
+export async function getMe(): Promise<User> {
+  const res = await apiClient.get<{ success: true; data: { user: User } }>('/auth/me');
+  return res.data.data.user;
 }
