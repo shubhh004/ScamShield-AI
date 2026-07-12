@@ -20,7 +20,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {leftIcon !== undefined && (
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150">
               {leftIcon}
             </span>
           )}
@@ -29,15 +29,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             className={cn(
               'w-full rounded-lg border border-border bg-bg-card px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted',
-              'transition-colors focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/30',
-              error !== undefined && 'border-danger/60 focus:border-danger/60 focus:ring-danger/20',
+              'transition-all duration-150 focus:outline-none focus:border-primary/70 focus:ring-2 focus:ring-primary/20',
+              'hover:border-border-subtle',
+              error !== undefined && 'border-danger/60 hover:border-danger/60 focus:border-danger/70 focus:ring-danger/20',
               leftIcon !== undefined && 'pl-10',
               className,
             )}
             {...props}
           />
         </div>
-        {error !== undefined && <p className="text-xs text-danger">{error}</p>}
+        {error !== undefined && (
+          <p className="text-xs text-danger">{error}</p>
+        )}
         {error === undefined && hint !== undefined && (
           <p className="text-xs text-text-muted">{hint}</p>
         )}

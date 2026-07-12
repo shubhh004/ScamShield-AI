@@ -19,6 +19,10 @@ export function Spinner({ size = 'md', className }: SpinnerProps): JSX.Element {
   );
 }
 
+export function Skeleton({ className }: { className?: string }): JSX.Element {
+  return <div className={cn('skeleton rounded-lg', className)} />;
+}
+
 export function PageLoader(): JSX.Element {
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg">

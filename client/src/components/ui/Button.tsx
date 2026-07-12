@@ -11,14 +11,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const base =
-  'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:opacity-50 disabled:pointer-events-none';
+  'inline-flex cursor-pointer items-center justify-center gap-2 font-medium transition-all duration-150 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-[#09090b] active:scale-[0.97] active:duration-75 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed select-none';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-primary hover:bg-primary-hover text-white shadow-glow-sm',
-  secondary: 'bg-bg-elevated hover:bg-border text-text-primary border border-border',
-  danger: 'bg-danger hover:bg-red-600 text-white',
-  ghost: 'hover:bg-bg-elevated text-text-secondary hover:text-text-primary',
-  outline: 'border border-border hover:border-border-subtle text-text-primary hover:bg-bg-elevated',
+  primary:
+    'bg-primary hover:bg-primary-hover text-white shadow-sm hover:shadow-md hover:shadow-primary/20',
+  secondary:
+    'bg-bg-elevated hover:bg-border text-text-primary border border-border hover:border-border-subtle',
+  danger:
+    'bg-danger hover:bg-red-600 text-white shadow-sm hover:shadow-md hover:shadow-danger/20',
+  ghost:
+    'hover:bg-bg-elevated text-text-secondary hover:text-text-primary',
+  outline:
+    'border border-border hover:border-border-subtle text-text-primary hover:bg-bg-elevated',
 };
 
 const sizes: Record<Size, string> = {
