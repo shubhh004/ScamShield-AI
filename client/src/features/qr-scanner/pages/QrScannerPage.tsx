@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { QrCode, Upload, RotateCcw } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { scanQr } from '@/services/scanner.service';
 import { getApiError } from '@/utils/apiError';
+import AiExplainButton from '@/components/ui/AiExplainButton';
 import type { QrScanResult, RiskLevel } from '@/types/scanner';
 
 function riskVariant(level: RiskLevel): 'high' | 'medium' | 'low' {
@@ -100,12 +102,22 @@ export default function QrScannerPage(): JSX.Element {
         </Card>
 
         {result !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
           <Card>
             <CardHeader>
               <CardTitle>Scan Result</CardTitle>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={reset} title="Reset">
-                <RotateCcw className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-2">
+                {result.scan !== null && (
+                  <AiExplainButton scanId={result.scan.scanId} />
+                )}
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={reset} title="Reset">
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
@@ -152,6 +164,7 @@ export default function QrScannerPage(): JSX.Element {
               )}
             </CardContent>
           </Card>
+          </motion.div>
         )}
       </div>
     </div>

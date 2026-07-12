@@ -115,6 +115,21 @@ function resolveRisk(
   }
 }
 
+function patchScanId(
+  scanType: ScanType,
+  result: Record<string, unknown>,
+  historyId: string,
+): Record<string, unknown> {
+  if (scanType === 'qr') {
+    const scan = result['scan'];
+    if (scan !== null && typeof scan === 'object') {
+      return { ...result, scan: { ...(scan as Record<string, unknown>), scanId: historyId } };
+    }
+    return result;
+  }
+  return { ...result, scanId: historyId };
+}
+
 function captureHistory(req: Request, res: Response, next: NextFunction): void {
   const scanType = resolveScanType(req.path);
 
@@ -140,9 +155,17 @@ function captureHistory(req: Request, res: Response, next: NextFunction): void {
         const input = resolveInput(scanType, reqBody, result);
         const { riskScore, confidence } = resolveRisk(scanType, result);
 
-        saveHistory({ userId, scanType, input, result, riskScore, confidence }).catch(
-          (err: unknown) => logger.warn('Failed to save scan history', { error: String(err) }),
-        );
+        saveHistory({ userId, scanType, input, result, riskScore, confidence })
+          .then((historyId) => {
+            const patchedResult = patchScanId(scanType, result, historyId);
+            originalJson({ ...payload, data: patchedResult });
+          })
+          .catch((err: unknown) => {
+            logger.warn('Failed to save scan history', { error: String(err) });
+            originalJson(body);
+          });
+
+        return res;
       }
     }
 

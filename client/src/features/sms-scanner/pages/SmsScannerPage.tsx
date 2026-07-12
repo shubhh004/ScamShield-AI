@@ -3,12 +3,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { MessageSquare, RotateCcw } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { scanSms } from '@/services/scanner.service';
 import { getApiError } from '@/utils/apiError';
+import AiExplainButton from '@/components/ui/AiExplainButton';
 import type { SmsScanResult, RiskLevel } from '@/types/scanner';
 
 const schema = z.object({
@@ -93,12 +95,20 @@ export default function SmsScannerPage(): JSX.Element {
         </Card>
 
         {result !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
           <Card>
             <CardHeader>
               <CardTitle>Scan Result</CardTitle>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={reset} title="Reset">
-                <RotateCcw className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <AiExplainButton scanId={result.scanId} />
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={reset} title="Reset">
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
@@ -161,6 +171,7 @@ export default function SmsScannerPage(): JSX.Element {
               )}
             </CardContent>
           </Card>
+          </motion.div>
         )}
       </div>
     </div>

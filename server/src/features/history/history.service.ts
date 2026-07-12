@@ -19,8 +19,8 @@ export interface SaveHistoryInput {
   confidence: number;
 }
 
-export async function saveHistory(payload: SaveHistoryInput): Promise<void> {
-  await History.create({
+export async function saveHistory(payload: SaveHistoryInput): Promise<string> {
+  const doc = await History.create({
     userId: new mongoose.Types.ObjectId(payload.userId),
     scanType: payload.scanType,
     input: payload.input,
@@ -28,6 +28,7 @@ export async function saveHistory(payload: SaveHistoryInput): Promise<void> {
     riskScore: payload.riskScore,
     confidence: payload.confidence,
   });
+  return String(doc._id);
 }
 
 export async function listHistory(

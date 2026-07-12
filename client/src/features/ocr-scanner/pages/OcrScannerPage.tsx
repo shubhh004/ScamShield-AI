@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Image, Upload, RotateCcw } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { scanImage } from '@/services/scanner.service';
 import { getApiError } from '@/utils/apiError';
+import AiExplainButton from '@/components/ui/AiExplainButton';
 import type { ImageScanResult, RiskLevel } from '@/types/scanner';
 
 function riskVariant(level: RiskLevel): 'high' | 'medium' | 'low' {
@@ -108,12 +110,20 @@ export default function OcrScannerPage(): JSX.Element {
         </Card>
 
         {result !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
           <Card>
             <CardHeader>
               <CardTitle>Scan Result</CardTitle>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={reset} title="Reset">
-                <RotateCcw className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <AiExplainButton scanId={result.scanId} />
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={reset} title="Reset">
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <div className="flex flex-wrap items-center gap-2">
@@ -240,6 +250,7 @@ export default function OcrScannerPage(): JSX.Element {
               )}
             </CardContent>
           </Card>
+          </motion.div>
         )}
       </div>
     </div>
