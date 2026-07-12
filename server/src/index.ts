@@ -18,6 +18,7 @@ import imageRoutes from './features/scan-image/image.routes';
 import historyRoutes from './features/history/history.routes';
 import dashboardRoutes from './features/dashboard/dashboard.routes';
 import analyticsRoutes from './features/analytics/analytics.routes';
+import aiRoutes from './features/ai/ai.routes';
 import { saveHistory } from './features/history/history.service';
 import type { ScanType } from './features/history/history.types';
 
@@ -174,6 +175,7 @@ app.use('/api/v1/scan', imageRoutes);
 app.use('/api/v1/history', historyRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/analytics', analyticsRoutes);
+app.use('/api/v1/ai', aiRoutes);
 
 // ─── 404 handler ─────────────────────────────────────────────────────────────
 

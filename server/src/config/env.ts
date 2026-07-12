@@ -13,6 +13,8 @@ const envSchema = z.object({
   JWT_REFRESH_SECRET: z.string().default('dev-refresh-secret-change-in-production'),
   JWT_ACCESS_EXPIRES: z.string().default('15m'),
   JWT_REFRESH_EXPIRES: z.string().default('7d'),
+  GROQ_API_KEY: z.string().default(''),
+  GROQ_MODEL: z.string().default('llama3-8b-8192'),
 });
 
 const parsed = envSchema.safeParse(process.env);
