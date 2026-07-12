@@ -140,13 +140,15 @@ function LoadingSkeleton(): JSX.Element {
         <CardHeader><SkeletonBlock className="h-5 w-36" /></CardHeader>
         <CardContent className="flex flex-col gap-4">
           {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-3">
-                <SkeletonBlock className="h-5 w-5 rounded-full" />
-                <SkeletonBlock className="h-3 flex-1" />
-                <SkeletonBlock className="h-5 w-8 rounded-full" />
+            <div key={i} className="flex items-center gap-3">
+              <SkeletonBlock className="h-5 w-5 shrink-0 rounded-full" />
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <SkeletonBlock className="h-3 flex-1" />
+                  <SkeletonBlock className="h-5 w-8 shrink-0 rounded-full" />
+                </div>
+                <SkeletonBlock className="h-1.5 w-full" />
               </div>
-              <SkeletonBlock className="ml-8 h-1.5 w-full" />
             </div>
           ))}
         </CardContent>
@@ -545,31 +547,33 @@ export default function AnalyticsPage(): JSX.Element {
               {data.topThreatReasons.map((item, i) => {
                 const pct =
                   maxThreatCount > 0
-                    ? Math.round((item.count / maxThreatCount) * 100)
+                    ? (item.count / maxThreatCount) * 100
                     : 0;
                 return (
-                  <div key={i} className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bg-elevated text-[10px] font-medium tabular-nums text-text-muted">
-                        {i + 1}
-                      </span>
-                      <p className="min-w-0 flex-1 truncate text-sm text-text-secondary">
-                        {item.reason}
-                      </p>
-                      <Badge
-                        variant={i === 0 ? 'high' : 'default'}
-                        className="shrink-0 tabular-nums"
-                      >
-                        {item.count}
-                      </Badge>
-                    </div>
-                    <div className="ml-8 h-1.5 w-full overflow-hidden rounded-full bg-bg-elevated">
-                      <motion.div
-                        className="h-1.5 rounded-full bg-primary"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${pct}%` }}
-                        transition={{ duration: 0.6, delay: 0.05 * i }}
-                      />
+                  <div key={i} className="flex items-center gap-3">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-bg-elevated text-[10px] font-medium tabular-nums text-text-muted">
+                      {i + 1}
+                    </span>
+                    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                      <div className="flex items-center gap-2">
+                        <p className="min-w-0 flex-1 truncate text-sm text-text-secondary">
+                          {item.reason}
+                        </p>
+                        <Badge
+                          variant={i === 0 ? 'high' : 'default'}
+                          className="shrink-0 tabular-nums"
+                        >
+                          {item.count}
+                        </Badge>
+                      </div>
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-bg-elevated">
+                        <motion.div
+                          className="h-1.5 rounded-full bg-primary"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${pct}%` }}
+                          transition={{ duration: 0.6, delay: 0.05 * i, ease: 'easeOut' }}
+                        />
+                      </div>
                     </div>
                   </div>
                 );

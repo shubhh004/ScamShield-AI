@@ -1,4 +1,16 @@
 $kind: http-request
-url: ""
-method: GET
+name: test3
+url: http://localhost:5000/api/v1/ai/explain
+method: POST
+headers:
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTUwZjY1NDk4NWViNDk5NmNjODIyMDYiLCJlbWFpbCI6InNodWJoMkBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaXNFbWFpbFZlcmlmaWVkIjpmYWxzZSwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc4MzgzNDM3NCwiZXhwIjoxNzgzODM1Mjc0fQ.20ap_HXnm94tAJbOtoqfPb6qvIcpKkflpTNho7j1fbU
+body:
+  type: json
+  content: "{\r
+
+    \  \"scanId\": \"6a531efc6b447e683ffb7f41\"\r
+
+    }"
+auth:
+  type: bearer
 order: 4499038326493097

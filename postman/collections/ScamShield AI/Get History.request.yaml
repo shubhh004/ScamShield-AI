@@ -1,4 +1,18 @@
 $kind: http-request
-url: ""
+name: Get History
+url: http://localhost:5000/api/v1/history
 method: GET
+headers:
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTUwZjY1NDk4NWViNDk5NmNjODIyMDYiLCJlbWFpbCI6InNodWJoMkBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaXNFbWFpbFZlcmlmaWVkIjpmYWxzZSwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc4MzgzNDU3OSwiZXhwIjoxNzgzODM1NDc5fQ.kuPNKxFYxEOBeLGRy4AKCMi0Pe0hMo7FmSUP6giGYoY
+body:
+  type: json
+  content: "{\r
+
+    \  \"scanId\": \"<existing_scan_id>\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTUwZjY1NDk4NWViNDk5NmNjODIyMDYiLCJlbWFpbCI6InNodWJoMkBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaXNFbWFpbFZlcmlmaWVkIjpmYWxzZSwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc4MzgzNDIwOCwiZXhwIjoxNzgzODM1MTA4fQ.jR1mhta57l4ntlduav04j4mi0IyJlX8eu53gyD8xlgs
 order: 4497369391596537

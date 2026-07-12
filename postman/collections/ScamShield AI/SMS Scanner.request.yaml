@@ -1,7 +1,12 @@
 $kind: http-request
 name: SMS Scanner
-url: http://localhost:5000/api/v1/scan/image
+url: http://localhost:5000/api/v1/scan/image?image=file
 method: POST
+queryParams:
+  - key: image
+    value: file
+    disabled: false
+    description: ""
 body:
   type: formdata
   content:

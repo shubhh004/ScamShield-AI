@@ -2,7 +2,9 @@ import type { RiskAssessment, RiskLevel } from './risk.types';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
-const SUSPICIOUS_TLDS = new Set(['.xyz', '.top', '.click', '.tk', '.gq']);
+const SUSPICIOUS_TLDS = new Set([
+  '.xyz', '.top', '.click', '.tk', '.gq', '.live', '.shop', '.loan',
+]);
 
 const BRANDS = [
   'google', 'paypal', 'amazon', 'microsoft', 'apple', 'facebook',
@@ -12,10 +14,24 @@ const BRANDS = [
 
 const SUSPICIOUS_KEYWORDS = [
   'login', 'signin', 'verify', 'secure', 'update', 'password',
-  'confirm', 'account', 'gift', 'reward', 'prize', 'wallet', 'bank', 'payment',
+  'confirm', 'account', 'gift', 'reward', 'prize', 'wallet', 'bank',
+  'payment', 'otp',
 ];
 
-const URL_SHORTENERS = new Set(['bit.ly', 'tinyurl.com', 't.co', 'goo.gl', 'rb.gy', 'cutt.ly']);
+const URL_SHORTENERS = new Set([
+  'bit.ly', 'tinyurl.com', 't.co', 'goo.gl', 'rb.gy', 'cutt.ly',
+]);
+
+// Specific typosquatting patterns targeting popular brands
+const TYPOSQUATTING = [
+  'paypal-login', 'paypa1', 'paypall',
+  'amaz0n', 'amazon-secure', 'amazon-login', 'amazon-update', 'amazon-verify',
+  'faceboook', 'facebok',
+  'g00gle', 'googgle',
+  'microsofft', 'micros0ft',
+  'apple-id-verify', 'apple-login', 'apple-secure',
+  'netflix-login', 'netflix-verify',
+];
 
 // Matches bare IPv4 addresses; IPv6 is wrapped in brackets by the URL parser
 const IPV4_RE = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
@@ -49,12 +65,11 @@ function toRiskLevel(score: number): RiskLevel {
   return 'HIGH';
 }
 
-// Piecewise linear: anchored at (0→20), (20→20), (40→55), (70→95), (100→100)
+// LOW (0–20) → 20–50 %, MEDIUM (21–49) → 50–80 %, HIGH (50–100) → 80–99 %
 function toConfidence(score: number): number {
-  if (score <= 20) return 20;
-  if (score <= 40) return Math.round(20 + (score - 20) * 1.75);
-  if (score <= 70) return Math.round(55 + (score - 40) * (40 / 30));
-  return Math.min(100, Math.round(95 + (score - 70) * (5 / 30)));
+  if (score <= 20) return Math.round(20 + score * 1.5);
+  if (score <= 49) return Math.round(50 + (score - 20) * (30 / 29));
+  return Math.min(99, Math.round(80 + (score - 49) * (19 / 51)));
 }
 
 // ── Engine ─────────────────────────────────────────────────────────────────────
@@ -64,8 +79,6 @@ export function assessRisk(normalizedUrl: string, rawUrl = normalizedUrl): RiskA
 
   let score = 0;
   const reasons: string[] = [];
-
-  // ── Sprint 3B rules ──────────────────────────────────────────────────────────
 
   // Rule 1: IP address as host (+30)
   if (isIpHost(hostname)) {
@@ -98,29 +111,28 @@ export function assessRisk(normalizedUrl: string, rawUrl = normalizedUrl): RiskA
     reasons.push('Excessive number of subdomains');
   }
 
-  // ── Sprint 3C rules ──────────────────────────────────────────────────────────
-
   // Rule 6: Punycode domain (+25)
   if (hostname.includes('xn--')) {
     score += 25;
     reasons.push('Punycode domain detected');
   }
 
-  // Rule 7: Brand impersonation (+20)
-  // Fires when a brand name appears in hostname/path but is NOT the actual SLD
+  const urlTarget = (hostname + pathname).toLowerCase();
   const sld = getSld(hostname);
-  const brandTarget = (hostname + pathname).toLowerCase();
-  const matchedBrand = BRANDS.find((brand) => brandTarget.includes(brand) && sld !== brand);
+
+  // Rule 7: Brand impersonation (+20)
+  const matchedBrand = BRANDS.find((brand) => urlTarget.includes(brand) && sld !== brand);
   if (matchedBrand !== undefined) {
     score += 20;
     reasons.push('Brand impersonation');
   }
 
-  // Rule 8: Suspicious keywords (+10 each, max +30)
-  const kwTarget = (hostname + pathname).toLowerCase();
-  const matchedKeywords = SUSPICIOUS_KEYWORDS.filter((kw) => kwTarget.includes(kw));
-  score += Math.min(30, matchedKeywords.length * 10);
-  matchedKeywords.forEach((kw) => reasons.push(`Suspicious keyword: ${kw}`));
+  // Rule 8: Credential / phishing keywords (+10 each, max +30)
+  const matchedKeywords = SUSPICIOUS_KEYWORDS.filter((kw) => urlTarget.includes(kw));
+  if (matchedKeywords.length > 0) {
+    score += Math.min(30, matchedKeywords.length * 10);
+    reasons.push('Credential or phishing keywords');
+  }
 
   // Rule 9: Unicode (homograph) hostname — check raw URL before punycode normalisation (+25)
   const rawHostMatch = /^https?:\/\/([^/?#@:[\]]+)/i.exec(rawUrl);
@@ -133,13 +145,18 @@ export function assessRisk(normalizedUrl: string, rawUrl = normalizedUrl): RiskA
   // Rule 10: URL shortener (+15)
   if (URL_SHORTENERS.has(hostname)) {
     score += 15;
-    reasons.push('URL shortener');
+    reasons.push('URL shortener detected');
   }
 
-  // Rule 11: HTTPS (-5, floor at 0)
+  // Rule 11: Typosquatting — digit/letter substitutions and hyphenated brand+action combos (+30)
+  if (TYPOSQUATTING.some((pattern) => urlTarget.includes(pattern))) {
+    score += 30;
+    reasons.push('Typosquatting detected');
+  }
+
+  // Rule 12: HTTPS reduces score slightly (-5, floor 0)
   if (protocol === 'https:') {
     score = Math.max(0, score - 5);
-    reasons.push('HTTPS detected');
   }
 
   const riskScore = Math.min(100, score);

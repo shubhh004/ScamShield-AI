@@ -7,13 +7,27 @@ import type { RiskLevel } from '../scan-url/risk.types';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
-const URGENCY_WORDS = ['urgent', 'immediately', 'act now', 'last chance', 'expires today'];
+const URGENCY_WORDS = [
+  'urgent', 'immediately', 'act now', 'last chance', 'expires today',
+  'click here', 'verify now', 'limited offer',
+];
 
-const MONEY_WORDS = ['win', 'lottery', 'reward', 'cash', 'free', 'gift'];
+const MONEY_WORDS = [
+  'win', 'lottery', 'reward', 'cash', 'free', 'gift', 'prize', 'jackpot',
+];
 
-const BANK_WORDS = ['upi', 'bank', 'refund', 'kyc', 'credit card', 'debit card'];
+const BANK_WORDS = [
+  'upi', 'bank', 'refund', 'kyc', 'credit card', 'debit card',
+  'payment', 'wallet',
+];
 
-const OTP_WORDS = ['otp', 'verification code', 'login code'];
+const OTP_WORDS = [
+  'otp', 'verification code', 'one-time password', 'login code',
+];
+
+const CRYPTO_WORDS = [
+  'crypto', 'bitcoin', 'btc', 'ethereum', 'eth', 'nft',
+];
 
 // Matches http/https URLs; trailing punctuation excluded
 const URL_RE = /https?:\/\/[^\s<>"'()[\]]+/gi;
@@ -34,12 +48,11 @@ function toRiskLevel(score: number): RiskLevel {
   return 'HIGH';
 }
 
-// Piecewise linear confidence — identical anchors to the URL engine
+// LOW (0–20) → 20–50 %, MEDIUM (21–49) → 50–80 %, HIGH (50–100) → 80–99 %
 function toConfidence(score: number): number {
-  if (score <= 20) return 20;
-  if (score <= 40) return Math.round(20 + (score - 20) * 1.75);
-  if (score <= 70) return Math.round(55 + (score - 40) * (40 / 30));
-  return Math.min(100, Math.round(95 + (score - 70) * (5 / 30)));
+  if (score <= 20) return Math.round(20 + score * 1.5);
+  if (score <= 49) return Math.round(50 + (score - 20) * (30 / 29));
+  return Math.min(99, Math.round(80 + (score - 49) * (19 / 51)));
 }
 
 function containsAny(text: string, terms: string[]): boolean {
@@ -77,31 +90,37 @@ export async function initiateSmsScan(input: SmsScanInput): Promise<SmsScanResul
   let score = 0;
   const reasons: string[] = [];
 
-  // Rule 1: Urgency words (+20)
+  // Rule 1: Urgency language (+20)
   if (containsAny(text, URGENCY_WORDS)) {
     score += 20;
     reasons.push('Urgency language');
   }
 
-  // Rule 2: Money / reward words (+20)
+  // Rule 2: Prize / reward bait (+20)
   if (containsAny(text, MONEY_WORDS)) {
     score += 20;
-    reasons.push('Reward bait');
+    reasons.push('Prize or reward bait');
   }
 
-  // Rule 3: Banking / financial keywords (+20)
+  // Rule 3: Banking / financial keywords (+25)
   if (containsAny(text, BANK_WORDS)) {
-    score += 20;
+    score += 25;
     reasons.push('Financial keywords');
   }
 
-  // Rule 4: OTP-related keywords (+15)
+  // Rule 4: OTP-related keywords (+30) — high weight; OTP stealing is a primary scam vector
   if (containsAny(text, OTP_WORDS)) {
-    score += 15;
-    reasons.push('OTP related');
+    score += 30;
+    reasons.push('OTP or verification code request');
   }
 
-  // Rule 5: Extract and score URLs
+  // Rule 5: Crypto scam keywords (+25)
+  if (containsAny(text, CRYPTO_WORDS)) {
+    score += 25;
+    reasons.push('Cryptocurrency or crypto scam keywords');
+  }
+
+  // Rule 6: Extract and score URLs
   const extractedUrls = extractUrls(input.message);
   const urlsFound: ScannedUrl[] = extractedUrls.map((url) => {
     const normalizedUrl = new URL(url).href;
@@ -125,7 +144,7 @@ export async function initiateSmsScan(input: SmsScanInput): Promise<SmsScanResul
     reasons.push('Suspicious URL in message');
   }
 
-  // Rule 6: Phone number extraction (informational — no score impact)
+  // Rule 7: Phone number extraction (informational — no score impact)
   const phoneNumbersFound = extractPhoneNumbers(input.message);
 
   const riskScore = Math.min(100, score);
