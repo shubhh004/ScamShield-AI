@@ -1,4 +1,13 @@
 $kind: http-request
-url: ""
-method: GET
+name: Test 1
+url: http://localhost:5000/api/v1/scan/file
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src: []
+      description: ""
+      disabled: false
 order: 4240578702931975

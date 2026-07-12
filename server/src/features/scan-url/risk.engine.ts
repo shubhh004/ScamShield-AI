@@ -19,6 +19,7 @@ const URL_SHORTENERS = new Set(['bit.ly', 'tinyurl.com', 't.co', 'goo.gl', 'rb.g
 
 // Matches bare IPv4 addresses; IPv6 is wrapped in brackets by the URL parser
 const IPV4_RE = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
+// eslint-disable-next-line no-control-regex
 const NON_ASCII_RE = /[^\x00-\x7F]/;
 
 // ── Helpers ────────────────────────────────────────────────────────────────────

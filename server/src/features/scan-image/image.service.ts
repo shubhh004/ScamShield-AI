@@ -13,7 +13,7 @@ import type { ImageScanResult, OcrData, Recommendation } from './image.types';
 // ── Regexes ───────────────────────────────────────────────────────────────────
 
 const URL_RE = /https?:\/\/[^\s<>"'()[\]]+/gi;
-const EMAIL_RE = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
+const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 const PHONE_RE =
   /(?:\+91[\s-]?[6-9]\d{9}|0[6-9]\d{9}|\+\d{1,3}[\s-]?\(?\d{1,4}\)?[\s-]?\d{3,5}[\s-]?\d{4,6}|(?<![A-Za-z0-9])[6-9]\d{9}(?![A-Za-z0-9]))/g;
 

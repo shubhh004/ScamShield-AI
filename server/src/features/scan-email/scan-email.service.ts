@@ -25,7 +25,7 @@ const WELL_KNOWN_DOMAINS = new Set([
 ]);
 
 // Matches http/https URLs; excludes common trailing punctuation via character class
-const URL_RE = /https?:\/\/[^\s<>"'()\[\]]+/gi;
+const URL_RE = /https?:\/\/[^\s<>"'()[\]]+/gi;
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 

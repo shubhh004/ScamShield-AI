@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction, CookieOptions } from 'express';
 import * as authService from './auth.service';
 import { InvalidRefreshTokenError, UnauthorizedError } from '../../lib/errors';
 import { env } from '../../config/env';
@@ -6,7 +6,7 @@ import { env } from '../../config/env';
 const REFRESH_COOKIE_NAME = 'refreshToken';
 const REFRESH_COOKIE_PATH = '/api/v1/auth';
 
-function buildCookieOptions() {
+function buildCookieOptions(): CookieOptions {
   return {
     httpOnly: true,
     secure: env.NODE_ENV === 'production',

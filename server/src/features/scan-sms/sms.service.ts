@@ -16,7 +16,7 @@ const BANK_WORDS = ['upi', 'bank', 'refund', 'kyc', 'credit card', 'debit card']
 const OTP_WORDS = ['otp', 'verification code', 'login code'];
 
 // Matches http/https URLs; trailing punctuation excluded
-const URL_RE = /https?:\/\/[^\s<>"'()\[\]]+/gi;
+const URL_RE = /https?:\/\/[^\s<>"'()[\]]+/gi;
 
 // Phone number patterns:
 //   +91XXXXXXXXXX  (India with country code)

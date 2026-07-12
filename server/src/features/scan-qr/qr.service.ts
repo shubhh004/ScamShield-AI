@@ -12,7 +12,7 @@ async function decodeQrFromBuffer(buffer: Buffer): Promise<string> {
 
   return new Promise((resolve, reject) => {
     const qr = new QrCode();
-    qr.callback = (err, value) => {
+    qr.callback = (err, value): void => {
       if (err !== null && err !== undefined) {
         reject(new AppError(400, 'QR_NOT_FOUND', 'No QR code found in image'));
         return;
