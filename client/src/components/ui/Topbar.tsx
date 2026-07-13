@@ -1,6 +1,7 @@
-import { Bell, LogOut, User } from 'lucide-react';
+import { Bell, LogOut, User, Menu } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import Button from './Button';
+import { useUIStore } from '@/store/uiStore';
 
 interface TopbarProps {
   title?: string;
@@ -8,6 +9,7 @@ interface TopbarProps {
 
 export default function Topbar({ title }: TopbarProps): JSX.Element {
   const { user, logout } = useAuth();
+  const { toggleSidebar } = useUIStore();
 
   function handleLogout(): void {
     void logout();
@@ -16,8 +18,19 @@ export default function Topbar({ title }: TopbarProps): JSX.Element {
   const displayName = user?.name ?? user?.email ?? 'Account';
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-bg-card px-6">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-bg-card px-4 md:px-6">
       <div className="flex items-center gap-3">
+        {/* Mobile hamburger — hidden on desktop */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0 md:hidden"
+          onClick={toggleSidebar}
+          aria-label="Toggle navigation menu"
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+
         {title !== undefined && (
           <h1 className="text-sm font-semibold text-text-primary">{title}</h1>
         )}

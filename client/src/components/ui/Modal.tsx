@@ -26,15 +26,51 @@ export default function Modal({ open, onClose, title, children, className, size 
   useEffect(() => {
     if (!open) return;
 
+    const panel = panelRef.current;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
+    const FOCUSABLE =
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
     const handler = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key === 'Tab' && panel !== null) {
+        const els = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE));
+        if (els.length === 0) {
+          e.preventDefault();
+          return;
+        }
+        const first = els[0] as HTMLElement;
+        const last = els[els.length - 1] as HTMLElement;
+        if (e.shiftKey) {
+          if (document.activeElement === first || document.activeElement === panel) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
     };
+
     window.addEventListener('keydown', handler);
 
-    panelRef.current?.focus();
+    // Focus first focusable element, or fall back to the panel itself
+    requestAnimationFrame(() => {
+      const first = panel?.querySelector<HTMLElement>(FOCUSABLE);
+      if (first !== null && first !== undefined) {
+        first.focus();
+      } else {
+        panel?.focus();
+      }
+    });
 
     return () => {
       window.removeEventListener('keydown', handler);

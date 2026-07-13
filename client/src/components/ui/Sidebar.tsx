@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -73,19 +74,39 @@ function NavItem({ label, icon: Icon, to, collapsed }: { label: string; icon: Re
 
 export default function Sidebar(): JSX.Element {
   const { sidebarOpen, toggleSidebar } = useUIStore();
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = (): void => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   return (
     <motion.aside
-      animate={{ width: sidebarOpen ? 220 : 60 }}
+      aria-hidden={isMobile && !sidebarOpen}
+      initial={
+        isMobile
+          ? { x: sidebarOpen ? 0 : -220, width: 220 }
+          : { x: 0, width: sidebarOpen ? 220 : 60 }
+      }
+      animate={
+        isMobile
+          ? { x: sidebarOpen ? 0 : -220, width: 220 }
+          : { x: 0, width: sidebarOpen ? 220 : 60 }
+      }
       transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="relative flex h-screen flex-col border-r border-border bg-bg-card py-4"
+      className={cn(
+        'flex flex-col border-r border-border bg-bg-card py-4',
+        isMobile ? 'fixed inset-y-0 left-0 z-50' : 'relative h-screen',
+      )}
     >
-      <div className={cn('mb-6 flex items-center gap-2.5 px-3', !sidebarOpen && 'justify-center px-2')}>
+      <div className={cn('mb-6 flex items-center gap-2.5 px-3', (!sidebarOpen && !isMobile) && 'justify-center px-2')}>
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary shadow-[0_0_12px_rgba(37,99,235,0.35)]">
           <Shield className="h-4 w-4 text-white" />
         </div>
         <AnimatePresence initial={false}>
-          {sidebarOpen && (
+          {(sidebarOpen || isMobile) && (
             <motion.span
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: 'auto' }}
@@ -101,23 +122,26 @@ export default function Sidebar(): JSX.Element {
 
       <nav className="flex flex-1 flex-col gap-0.5 px-2">
         {NAV_ITEMS.map((item) => (
-          <NavItem key={item.to} {...item} collapsed={!sidebarOpen} />
+          <NavItem key={item.to} {...item} collapsed={!sidebarOpen && !isMobile} />
         ))}
         <div className="my-2 border-t border-border" />
         {BOTTOM_ITEMS.map((item) => (
-          <NavItem key={item.to} {...item} collapsed={!sidebarOpen} />
+          <NavItem key={item.to} {...item} collapsed={!sidebarOpen && !isMobile} />
         ))}
       </nav>
 
-      <button
-        onClick={toggleSidebar}
-        aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-        className="absolute -right-3 top-16 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-bg-card text-text-muted transition-colors hover:border-border-subtle hover:text-text-primary"
-      >
-        <motion.span animate={{ rotate: sidebarOpen ? 0 : 180 }} transition={{ duration: 0.2 }}>
-          <ChevronLeft className="h-3 w-3" />
-        </motion.span>
-      </button>
+      {/* Collapse toggle — desktop only */}
+      {!isMobile && (
+        <button
+          onClick={toggleSidebar}
+          aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          className="absolute -right-3 top-16 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-bg-card text-text-muted transition-colors hover:border-border-subtle hover:text-text-primary"
+        >
+          <motion.span animate={{ rotate: sidebarOpen ? 0 : 180 }} transition={{ duration: 0.2 }}>
+            <ChevronLeft className="h-3 w-3" />
+          </motion.span>
+        </button>
+      )}
     </motion.aside>
   );
 }

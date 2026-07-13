@@ -1095,12 +1095,12 @@ export default function LandingPage(): JSX.Element {
             <span className="text-sm font-bold text-text-primary">ScamShield AI</span>
           </Link>
           <div className="flex items-center gap-6 text-xs text-text-muted">
-            <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 transition-colors hover:text-text-primary">
+            <a href="#" onClick={(e) => e.preventDefault()} className="flex items-center gap-1.5 transition-colors hover:text-text-primary">
               <ExternalLink className="h-3 w-3" />
               GitHub
             </a>
-            <a href="#" className="transition-colors hover:text-text-primary">Privacy</a>
-            <a href="#" className="transition-colors hover:text-text-primary">Terms</a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="transition-colors hover:text-text-primary">Privacy</a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="transition-colors hover:text-text-primary">Terms</a>
             <span className="text-text-muted/60">© 2026 ScamShield AI</span>
           </div>
         </div>
