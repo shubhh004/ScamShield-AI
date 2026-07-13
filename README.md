@@ -1,6 +1,9 @@
-<p align="center">
-  <img src="./screenshots/hero-banner.png" width="100%" alt="ScamShield AI Hero"/>
-</p>
+<div align="center">
+
+<img src="assets/images/logo.png" alt="ScamShield AI" width="72" height="72" />
+
+
+<img src="./screenshots/hero-banner.png" alt="ScamShield AI Hero Banner" width="100%" />
 
 # ScamShield AI
 
