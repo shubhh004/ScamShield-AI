@@ -23,6 +23,7 @@ import {
   ArrowRight,
   ShieldCheck,
   ExternalLink,
+  Github,
   CheckCircle,
 } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
@@ -1087,21 +1088,48 @@ export default function LandingPage(): JSX.Element {
 
       {/* ── Footer ───────────────────────────────────────────────────── */}
       <footer className="border-t border-border/60">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-5 px-6 py-10 sm:flex-row sm:justify-between">
-          <Link to={ROUTES.HOME} className="flex items-center gap-2 transition-opacity hover:opacity-80">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-[0_0_12px_rgba(37,99,235,0.4)]">
-              <Shield className="h-4 w-4 text-white" />
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          {/* Logo + links row */}
+          <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
+            <Link to={ROUTES.HOME} className="flex items-center gap-2 transition-opacity hover:opacity-80">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-[0_0_12px_rgba(37,99,235,0.4)]">
+                <Shield className="h-4 w-4 text-white" />
+              </div>
+              <span className="text-sm font-bold text-text-primary">ScamShield AI</span>
+            </Link>
+
+            <div className="flex flex-wrap items-center justify-center gap-5 text-xs text-text-muted sm:justify-end">
+              <a
+                href="https://github.com/shubhh004/ScamShield-AI"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 transition-colors hover:text-text-primary"
+              >
+                <Github className="h-3.5 w-3.5" />
+                GitHub
+              </a>
+              <Link to={ROUTES.PRIVACY} className="transition-colors hover:text-text-primary">
+                Privacy Policy
+              </Link>
+              <Link to={ROUTES.TERMS} className="transition-colors hover:text-text-primary">
+                Terms of Service
+              </Link>
+              <a
+                href="mailto:chaurasiashubh195@gmail.com"
+                className="flex items-center gap-1.5 transition-colors hover:text-text-primary"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                Contact
+              </a>
             </div>
-            <span className="text-sm font-bold text-text-primary">ScamShield AI</span>
-          </Link>
-          <div className="flex items-center gap-6 text-xs text-text-muted">
-            <a href="#" onClick={(e) => e.preventDefault()} className="flex items-center gap-1.5 transition-colors hover:text-text-primary">
-              <ExternalLink className="h-3 w-3" />
-              GitHub
-            </a>
-            <a href="#" onClick={(e) => e.preventDefault()} className="transition-colors hover:text-text-primary">Privacy</a>
-            <a href="#" onClick={(e) => e.preventDefault()} className="transition-colors hover:text-text-primary">Terms</a>
-            <span className="text-text-muted/60">© 2026 ScamShield AI</span>
+          </div>
+
+          {/* Attribution + copyright */}
+          <div className="mt-6 border-t border-border/40 pt-5 text-center text-xs text-text-muted">
+            Built with ❤️ by{' '}
+            <span className="font-medium text-primary">Shubh Chaurasia</span>
+            <span className="mx-3 text-text-muted/40">·</span>
+            © {new Date().getFullYear()} ScamShield AI
           </div>
         </div>
       </footer>

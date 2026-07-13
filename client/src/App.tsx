@@ -10,6 +10,8 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { ROUTES } from '@/constants/routes';
 
 const LandingPage = lazy(() => import('@/pages/LandingPage'));
+const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
+const TermsPage = lazy(() => import('@/pages/TermsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
@@ -29,9 +31,11 @@ export default function App(): JSX.Element {
       <AuthProvider>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            {/* Landing */}
+            {/* Landing + public content */}
             <Route element={<LandingLayout />}>
               <Route path={ROUTES.HOME} element={<LandingPage />} />
+              <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
+              <Route path={ROUTES.TERMS} element={<TermsPage />} />
             </Route>
 
             {/* Auth — redirect authenticated users to dashboard */}

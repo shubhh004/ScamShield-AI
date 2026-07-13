@@ -11,6 +11,8 @@ export const ROUTES = {
   HISTORY: '/history',
   ANALYTICS: '/analytics',
   SETTINGS: '/settings',
+  PRIVACY: '/privacy',
+  TERMS: '/terms',
   NOT_FOUND: '*',
 } as const;
 
