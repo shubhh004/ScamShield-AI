@@ -142,7 +142,7 @@ export default function OcrScannerPage(): JSX.Element {
                         <span className="text-sm font-medium text-text-secondary">
                           Drop image here
                         </span>
-                        <span className="text-xs text-text-muted">or click to browse · PNG, JPG, WEBP</span>
+                        <span className="text-xs text-text-muted">or click to browse · PNG, JPEG</span>
                       </div>
                     </>
                   )}

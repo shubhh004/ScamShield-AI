@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
-import { setAccessToken } from '@/lib/api/apiClient';
+import { setAccessToken, setOnRefreshFailure } from '@/lib/api/apiClient';
 import * as authService from '@/services/auth.service';
 import type { User, AuthState } from '@/types/auth';
 
@@ -48,6 +48,15 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     setUser(null);
     setToken(null);
     setAccessToken(null);
+  }, []);
+
+  useEffect(() => {
+    setOnRefreshFailure(() => {
+      setUser(null);
+      setToken(null);
+      setAccessToken(null);
+    });
+    return () => setOnRefreshFailure(null);
   }, []);
 
   return (

@@ -6,13 +6,13 @@ import { z } from 'zod';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
-import axios from 'axios';
 import { ROUTES } from '@/constants/routes';
 import { Card } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useAuth } from '@/hooks/useAuth';
 import * as authService from '@/services/auth.service';
+import { getApiError } from '@/utils/apiError';
 
 const schema = z
   .object({
@@ -33,14 +33,6 @@ const schema = z
   });
 
 type FormValues = z.infer<typeof schema>;
-
-function getApiError(err: unknown): string {
-  if (axios.isAxiosError(err)) {
-    const data = err.response?.data as { error?: { message?: string } } | undefined;
-    return data?.error?.message ?? 'Something went wrong. Please try again.';
-  }
-  return 'Something went wrong. Please try again.';
-}
 
 interface StrengthInfo {
   score: number;

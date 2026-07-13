@@ -9,8 +9,13 @@ const apiClient = axios.create({
 
 let accessToken: string | null = null;
 let isRefreshing = false;
+let onRefreshFailure: (() => void) | null = null;
 type QueueEntry = { resolve: (token: string) => void; reject: (err: unknown) => void };
 const failedQueue: QueueEntry[] = [];
+
+export function setOnRefreshFailure(fn: (() => void) | null): void {
+  onRefreshFailure = fn;
+}
 
 function processQueue(error: unknown, token: string | null): void {
   for (const entry of failedQueue) {
@@ -83,6 +88,7 @@ apiClient.interceptors.response.use(
     } catch (refreshError) {
       processQueue(refreshError, null);
       setAccessToken(null);
+      onRefreshFailure?.();
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;

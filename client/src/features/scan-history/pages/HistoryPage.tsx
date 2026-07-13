@@ -425,9 +425,11 @@ export default function HistoryPage(): JSX.Element {
                         <Badge variant={riskVariant(entry.riskScore)} className="tabular-nums">
                           {entry.riskScore}
                         </Badge>
-                        <span className="text-xs text-text-muted">
-                          · {entry.confidence}% confidence
-                        </span>
+                        {entry.confidence > 0 && (
+                          <span className="text-xs text-text-muted">
+                            · {entry.confidence}% confidence
+                          </span>
+                        )}
                       </div>
                       <p className="truncate text-xs text-text-secondary">
                         {truncate(entry.input, 80)}
