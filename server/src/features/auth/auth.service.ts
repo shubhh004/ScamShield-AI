@@ -12,7 +12,7 @@ import {
   InvalidRefreshTokenError,
   NotFoundError,
 } from '../../lib/errors';
-import type { RegisterInput, LoginInput } from './auth.schema';
+import type { RegisterInput, LoginInput, UpdateProfileInput, ChangePasswordInput } from './auth.schema';
 import type { UserRole } from './auth.constants';
 
 interface SafeUser {
@@ -150,6 +150,50 @@ export async function refreshAccessToken(
 
 export async function logoutUser(userId: string): Promise<void> {
   await User.findByIdAndUpdate(userId, { refreshTokenHash: null });
+}
+
+export async function updateProfile(userId: string, input: UpdateProfileInput): Promise<SafeUser> {
+  const user = await User.findOne({ _id: userId, isDeleted: false, isActive: true });
+  if (user === null) throw new NotFoundError('User');
+
+  if (input.email !== undefined && input.email !== user.email) {
+    const existing = await User.findOne({ email: input.email, isDeleted: false });
+    if (existing !== null) throw new ConflictError('An account with this email already exists');
+    user.email = input.email;
+    user.isEmailVerified = false;
+  }
+
+  if (input.name !== undefined) {
+    user.name = input.name;
+  }
+
+  await user.save();
+  return toSafeUser(user);
+}
+
+export async function changePassword(userId: string, input: ChangePasswordInput): Promise<void> {
+  const user = await User.findOne({ _id: userId, isDeleted: false, isActive: true }).select('+passwordHash');
+  if (user === null) throw new NotFoundError('User');
+
+  const passwordMatch = await comparePassword(input.currentPassword, user.passwordHash);
+  if (!passwordMatch) {
+    throw new UnauthorizedError('Current password is incorrect');
+  }
+
+  const newHash = await hashPassword(input.newPassword);
+  await User.findByIdAndUpdate(userId, { passwordHash: newHash, refreshTokenHash: null });
+}
+
+export async function deleteAccount(userId: string): Promise<void> {
+  const user = await User.findOne({ _id: userId, isDeleted: false });
+  if (user === null) throw new NotFoundError('User');
+
+  await User.findByIdAndUpdate(userId, {
+    isDeleted: true,
+    deletedAt: new Date(),
+    isActive: false,
+    refreshTokenHash: null,
+  });
 }
 
 export async function getMe(userId: string): Promise<UserProfile> {

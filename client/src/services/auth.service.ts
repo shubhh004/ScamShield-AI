@@ -24,3 +24,19 @@ export async function getMe(): Promise<User> {
   const res = await apiClient.get<{ success: true; data: { user: User } }>('/auth/me');
   return res.data.data.user;
 }
+
+export async function updateProfile(data: { name?: string; email?: string }): Promise<User> {
+  const res = await apiClient.patch<{ success: true; data: { user: User } }>('/auth/profile', data);
+  return res.data.data.user;
+}
+
+export async function changePassword(data: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<void> {
+  await apiClient.post('/auth/change-password', data);
+}
+
+export async function deleteAccount(): Promise<void> {
+  await apiClient.delete('/auth/account');
+}

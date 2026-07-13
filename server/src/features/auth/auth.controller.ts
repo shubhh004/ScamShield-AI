@@ -82,6 +82,40 @@ export async function me(req: Request, res: Response, next: NextFunction): Promi
   }
 }
 
+export async function updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const user = req.user;
+    if (user === undefined) { next(new UnauthorizedError()); return; }
+    const updated = await authService.updateProfile(user.id, req.body);
+    res.status(200).json({ success: true, data: { user: updated } });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function changePassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const user = req.user;
+    if (user === undefined) { next(new UnauthorizedError()); return; }
+    await authService.changePassword(user.id, req.body);
+    res.status(200).json({ success: true, data: { message: 'Password changed successfully' } });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const user = req.user;
+    if (user === undefined) { next(new UnauthorizedError()); return; }
+    await authService.deleteAccount(user.id);
+    clearRefreshCookie(res);
+    res.status(200).json({ success: true, data: { message: 'Account deleted successfully' } });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function logout(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const user = req.user;
