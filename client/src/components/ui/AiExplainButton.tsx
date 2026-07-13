@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Cpu, CheckCircle2 } from 'lucide-react';
+import { Cpu, CheckCircle2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import Modal from './Modal';
 import Button from './Button';
@@ -55,19 +55,31 @@ export default function AiExplainButton({ scanId }: AiExplainButtonProps): JSX.E
 
       <Modal open={open} onClose={handleClose} title="AI Explanation" size="lg">
         {isLoading ? (
-          <div className="flex items-center justify-center py-10">
-            <div className="flex flex-col items-center gap-3">
-              <Spinner />
-              <p className="text-xs text-text-muted">Analysing with AI…</p>
+          <div className="flex flex-col items-center justify-center gap-4 py-12">
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+              <Cpu className="h-5 w-5 text-primary" />
+              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-bg-card">
+                <Spinner size="sm" className="h-3 w-3" />
+              </span>
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-medium text-text-primary">Analysing with AI</p>
+              <p className="mt-0.5 text-xs text-text-muted">This usually takes a few seconds…</p>
             </div>
           </div>
         ) : result !== null ? (
           <div className="flex flex-col gap-5">
-            <p className="text-sm leading-relaxed text-text-secondary">{result.answer}</p>
+            <div className="rounded-xl border border-primary/15 bg-primary/5 p-4">
+              <div className="mb-2.5 flex items-center gap-2">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <span className="text-xs font-semibold text-primary">Analysis</span>
+              </div>
+              <p className="text-sm leading-relaxed text-text-secondary">{result.answer}</p>
+            </div>
 
             {result.tips.length > 0 && (
               <div>
-                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-text-muted">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                   Safety Tips
                 </p>
                 <ul className="flex flex-col gap-2.5">
@@ -81,7 +93,7 @@ export default function AiExplainButton({ scanId }: AiExplainButtonProps): JSX.E
               </div>
             )}
 
-            <p className="text-[10px] text-text-muted">
+            <p className="border-t border-border pt-3 text-[10px] text-text-muted">
               Powered by {result.provider} · {result.model}
             </p>
           </div>

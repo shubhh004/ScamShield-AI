@@ -92,10 +92,11 @@ export default function SmsScannerPage(): JSX.Element {
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-text-secondary">Message</label>
+                  <label htmlFor="sms-message" className="text-sm font-medium text-text-secondary">Message</label>
                   <textarea
+                    id="sms-message"
                     rows={5}
-                    className="w-full resize-none rounded-lg border border-border bg-bg-card px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted transition-all duration-150 focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-border-subtle"
+                    className="input-textarea"
                     placeholder="Paste the SMS text here…"
                     {...register('message')}
                   />

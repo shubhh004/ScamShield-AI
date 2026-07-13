@@ -14,7 +14,7 @@ export default function AuthLayout(): JSX.Element {
         }}
       />
 
-      <Link to={ROUTES.HOME} className="mb-8 flex items-center gap-2.5">
+      <Link to={ROUTES.HOME} className="mb-8 flex items-center gap-2.5 transition-opacity hover:opacity-80">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-glow">
           <Shield className="h-5 w-5 text-white" />
         </div>
@@ -25,7 +25,7 @@ export default function AuthLayout(): JSX.Element {
         <Outlet />
       </div>
 
-      <Toaster theme="dark" position="top-right" richColors />
+      <Toaster theme="dark" position="bottom-right" richColors />
     </div>
   );
 }

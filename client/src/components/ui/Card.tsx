@@ -10,7 +10,9 @@ export function Card({ glass = false, className, children, ...props }: CardProps
     <div
       className={cn(
         'rounded-lg border border-border p-6',
-        glass ? 'glass' : 'bg-bg-card',
+        glass
+          ? 'glass'
+          : 'bg-bg-card shadow-[0_1px_3px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.2)]',
         className,
       )}
       {...props}

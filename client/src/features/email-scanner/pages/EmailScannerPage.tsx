@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { Mail, RotateCcw, ShieldAlert } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import { cn } from '@/utils/cn';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
@@ -46,8 +45,7 @@ function riskBg(level: RiskLevel): string {
   return 'bg-success/10 border-success/20';
 }
 
-const textareaBase =
-  'w-full resize-none rounded-lg border border-border bg-bg-card px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted transition-all duration-150 focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/20 hover:border-border-subtle';
+const textareaBase = 'input-textarea';
 
 export default function EmailScannerPage(): JSX.Element {
   const [result, setResult] = useState<ScanEmailResult | null>(null);
@@ -109,9 +107,10 @@ export default function EmailScannerPage(): JSX.Element {
                 />
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-text-secondary">Subject</label>
+                  <label htmlFor="email-subject" className="text-sm font-medium text-text-secondary">Subject</label>
                   <input
-                    className={cn(textareaBase, 'resize-none')}
+                    id="email-subject"
+                    className={textareaBase}
                     placeholder="Email subject"
                     {...register('subject')}
                   />
@@ -121,8 +120,9 @@ export default function EmailScannerPage(): JSX.Element {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-text-secondary">Body</label>
+                  <label htmlFor="email-body" className="text-sm font-medium text-text-secondary">Body</label>
                   <textarea
+                    id="email-body"
                     rows={6}
                     className={textareaBase}
                     placeholder="Paste email body here…"

@@ -20,7 +20,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {leftIcon !== undefined && (
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors duration-150">
               {leftIcon}
             </span>
           )}
@@ -31,6 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'w-full rounded-lg border border-border bg-bg-card px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted',
               'transition-all duration-150 focus:outline-none focus:border-primary/70 focus:ring-2 focus:ring-primary/20',
               'hover:border-border-subtle',
+              'disabled:cursor-not-allowed disabled:opacity-50 disabled:select-none disabled:bg-bg-elevated disabled:hover:border-border',
               error !== undefined && 'border-danger/60 hover:border-danger/60 focus:border-danger/70 focus:ring-danger/20',
               leftIcon !== undefined && 'pl-10',
               className,

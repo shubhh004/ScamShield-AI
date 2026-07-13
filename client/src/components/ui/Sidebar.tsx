@@ -36,30 +36,37 @@ function NavItem({ label, icon: Icon, to, collapsed }: { label: string; icon: Re
   return (
     <NavLink
       to={to}
-      className={({ isActive }) =>
-        cn(
-          'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
-          isActive
-            ? 'bg-primary/10 text-primary'
-            : 'text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
-          collapsed && 'justify-center px-2',
-        )
-      }
+      title={collapsed ? label : undefined}
     >
-      <Icon className="h-4 w-4 shrink-0" />
-      <AnimatePresence initial={false}>
-        {!collapsed && (
-          <motion.span
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: 'auto' }}
-            exit={{ opacity: 0, width: 0 }}
-            transition={{ duration: 0.15 }}
-            className="overflow-hidden whitespace-nowrap"
-          >
-            {label}
-          </motion.span>
-        )}
-      </AnimatePresence>
+      {({ isActive }) => (
+        <div
+          className={cn(
+            'group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
+            isActive
+              ? 'bg-primary/10 text-primary'
+              : 'text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
+            collapsed && 'justify-center px-2',
+          )}
+        >
+          {isActive && !collapsed && (
+            <span className="pointer-events-none absolute left-0 top-1/2 h-[18px] w-0.5 -translate-y-1/2 rounded-full bg-primary" />
+          )}
+          <Icon className="h-5 w-5 shrink-0" />
+          <AnimatePresence initial={false}>
+            {!collapsed && (
+              <motion.span
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.15 }}
+                className="overflow-hidden whitespace-nowrap"
+              >
+                {label}
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </NavLink>
   );
 }
@@ -74,7 +81,7 @@ export default function Sidebar(): JSX.Element {
       className="relative flex h-screen flex-col border-r border-border bg-bg-card py-4"
     >
       <div className={cn('mb-6 flex items-center gap-2.5 px-3', !sidebarOpen && 'justify-center px-2')}>
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary shadow-[0_0_12px_rgba(37,99,235,0.35)]">
           <Shield className="h-4 w-4 text-white" />
         </div>
         <AnimatePresence initial={false}>
@@ -104,9 +111,8 @@ export default function Sidebar(): JSX.Element {
 
       <button
         onClick={toggleSidebar}
-        className={cn(
-          'absolute -right-3 top-16 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-bg-card text-text-muted hover:text-text-primary transition-colors',
-        )}
+        aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+        className="absolute -right-3 top-16 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-bg-card text-text-muted transition-colors hover:border-border-subtle hover:text-text-primary"
       >
         <motion.span animate={{ rotate: sidebarOpen ? 0 : 180 }} transition={{ duration: 0.2 }}>
           <ChevronLeft className="h-3 w-3" />

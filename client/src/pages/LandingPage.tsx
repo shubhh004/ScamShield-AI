@@ -1101,7 +1101,7 @@ export default function LandingPage(): JSX.Element {
             </a>
             <a href="#" className="transition-colors hover:text-text-primary">Privacy</a>
             <a href="#" className="transition-colors hover:text-text-primary">Terms</a>
-            <span className="text-text-muted/60">© 2025 ScamShield AI</span>
+            <span className="text-text-muted/60">© 2026 ScamShield AI</span>
           </div>
         </div>
       </footer>

@@ -55,18 +55,19 @@ export default function Modal({ open, onClose, title, children, className, size 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            transition={{ duration: 0.18 }}
+            className="absolute inset-0 bg-black/75 backdrop-blur-[6px]"
             onClick={onClose}
           />
           <motion.div
             ref={panelRef}
             tabIndex={-1}
-            initial={{ opacity: 0, scale: 0.95, y: 8 }}
+            initial={{ opacity: 0, scale: 0.96, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 8 }}
-            transition={{ duration: 0.15 }}
+            exit={{ opacity: 0, scale: 0.96, y: 12 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative z-10 w-full rounded-xl border border-border bg-bg-card p-6 shadow-card outline-none',
+              'relative z-10 w-full rounded-xl border border-border/60 bg-bg-card p-6 shadow-[0_24px_64px_rgba(0,0,0,0.5)] outline-none',
               sizes[size],
               className,
             )}
@@ -74,7 +75,7 @@ export default function Modal({ open, onClose, title, children, className, size 
             {title !== undefined && (
               <div className="mb-4 flex items-center justify-between">
                 <h2 id="modal-title" className="text-base font-semibold text-text-primary">{title}</h2>
-                <Button variant="ghost" size="sm" onClick={onClose} className="h-7 w-7 p-0">
+                <Button variant="ghost" size="sm" onClick={onClose} className="h-7 w-7 p-0" aria-label="Close">
                   <X className="h-4 w-4" />
                 </Button>
               </div>
