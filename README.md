@@ -22,7 +22,9 @@ Analyse URLs, emails, SMS, QR codes, and images for phishing and social engineer
 
 ---
 
-> **Screenshot coming soon** — production deployment in progress. See [`screenshots/`](./screenshots/) for the planned gallery.
+<div align="center">
+  <img src="screenshots/hero.png" alt="ScamShield AI — Landing Page" width="900" />
+</div>
 
 ---
 
@@ -40,6 +42,98 @@ Analyse URLs, emails, SMS, QR codes, and images for phishing and social engineer
 | 📜 | **History** | Searchable, filterable log with per-scan AI Explain on demand |
 | 🔐 | **Auth** | JWT in memory, HTTP-only refresh cookie, bcrypt, token rotation |
 | ⚙️ | **Settings** | Profile update, password change, account deletion with confirmation |
+
+---
+
+## Application Preview
+
+### Dashboard
+
+Activity summary with recent scans, risk distribution breakdown, and quick-access scanner entry points.
+
+<div align="center">
+  <img src="screenshots/dashboard.png" alt="Dashboard" width="900" />
+</div>
+
+<br />
+
+### URL Scanner
+
+Submit any URL for deep analysis — domain signals, Safe Browsing, VirusTotal, and AI risk scoring.
+
+<div align="center">
+  <img src="screenshots/url-scanner.png" alt="URL Scanner" width="900" />
+</div>
+
+<br />
+
+### Email Scanner
+
+Paste an email body to extract embedded URLs, detect urgency patterns, and identify sender mismatches.
+
+<div align="center">
+  <img src="screenshots/email-scanner.png" alt="Email Scanner" width="900" />
+</div>
+
+<br />
+
+### SMS Scanner
+
+Detect smishing attempts — shortlink expansion, OTP impersonation patterns, and keyword analysis.
+
+<div align="center">
+  <img src="screenshots/sms-scanner.png" alt="SMS Scanner" width="900" />
+</div>
+
+<br />
+
+### QR Scanner
+
+Upload a QR code image to decode and route its payload through the full threat analysis pipeline.
+
+<div align="center">
+  <img src="screenshots/qr-scanner.png" alt="QR Scanner" width="900" />
+</div>
+
+<br />
+
+### OCR Scanner
+
+Upload any image to extract text with Tesseract.js and scan all embedded URLs for threats.
+
+<div align="center">
+  <img src="screenshots/ocr-scanner.png" alt="OCR Scanner" width="900" />
+</div>
+
+<br />
+
+### Analytics
+
+Visualise scan volume, risk distribution, and scanner usage trends across your scan history.
+
+<div align="center">
+  <img src="screenshots/analytics.png" alt="Analytics" width="900" />
+</div>
+
+<br />
+
+### History
+
+Browse, search, and filter all past scans — re-run AI Explain on any historical result.
+
+<div align="center">
+  <img src="screenshots/history.png" alt="Scan History" width="900" />
+</div>
+
+<br />
+
+### Settings
+
+Manage your profile, change your password, and control account preferences in one place.
+
+<div align="center">
+  <img src="screenshots/settings.png" alt="Settings" width="900" />
+</div>
 
 ---
 
