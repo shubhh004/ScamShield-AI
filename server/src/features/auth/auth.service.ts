@@ -11,6 +11,7 @@ import {
   InvalidCredentialsError,
   InvalidRefreshTokenError,
   NotFoundError,
+  UnauthorizedError,
 } from '../../lib/errors';
 import type { RegisterInput, LoginInput, UpdateProfileInput, ChangePasswordInput } from './auth.schema';
 import type { UserRole } from './auth.constants';

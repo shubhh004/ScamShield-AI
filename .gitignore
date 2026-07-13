@@ -37,3 +37,12 @@ Thumbs.db
 
 # TypeScript
 *.tsbuildinfo
+
+# Tesseract OCR training data (large binary, fetched at runtime)
+*.traineddata
+
+# Postman sync artifacts
+.postman/
+
+# Claude Code project files
+.claude/
